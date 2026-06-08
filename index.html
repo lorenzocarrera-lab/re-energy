@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RE-ENERGY – Power Bank Sharing Station</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a; --white: #ffffff;
+      --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+      --gray-400: #9ca3af; --gray-500: #6b7280; --gray-700: #374151; --gray-900: #111827;
+      --accent: #ff6b9d; --accent-dark: #e0478a; --accent-glow: rgba(255,107,157,0.18);
+      --blue: #1a6bff; --blue-dark: #0d4fd9;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(10,10,10,0.88); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: padding .3s;
+    }
+    nav.scrolled { padding: 13px 60px; }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700;
+      letter-spacing: -0.5px; color: var(--white); text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo-img { height: 34px; width: auto; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--gray-400); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--accent) !important; color: var(--black) !important; padding: 10px 22px; border-radius: 8px; font-weight: 700 !important; transition: background .2s, transform .15s !important; }
+    .nav-cta:hover { background: var(--accent-dark) !important; transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,157,0.12) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 40% at 80% 80%, rgba(26,107,255,0.08) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; opacity: 0.04;
+      background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,107,157,0.1); border: 1px solid rgba(255,107,157,0.25);
+      color: var(--accent); font-size: 13px; font-weight: 600;
+      padding: 6px 16px; border-radius: 100px; margin-bottom: 28px; position: relative; z-index: 1;
+    }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(48px,7vw,88px); font-weight: 700; line-height: 1.05;
+      letter-spacing: -2px; position: relative; z-index: 1; max-width: 900px;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-size: clamp(17px,2.2vw,20px); color: var(--gray-400); max-width: 620px; line-height: 1.7; margin-top: 20px; position: relative; z-index: 1; }
+    .hero-actions { display: flex; gap: 16px; margin-top: 44px; position: relative; z-index: 1; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      background: var(--accent); color: var(--black); font-weight: 700; font-size: 15px;
+      padding: 14px 32px; border-radius: 10px; text-decoration: none;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 0 30px rgba(255,107,157,0.3);
+    }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 0 50px rgba(255,107,157,0.45); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.06); color: var(--white); font-weight: 600; font-size: 15px;
+      padding: 14px 32px; border-radius: 10px; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.12); transition: background .2s, transform .15s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .hero-stats { display: flex; gap: 48px; margin-top: 72px; position: relative; z-index: 1; flex-wrap: wrap; justify-content: center; }
+    .hero-stat { text-align: center; }
+    .hero-stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; }
+    .hero-stat-value span { color: var(--accent); }
+    .hero-stat-label { font-size: 13px; color: var(--gray-400); margin-top: 4px; }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--gray-500); font-size: 12px; font-weight: 500;
+      z-index: 1; animation: bounce 2s infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+    .hero-scroll svg { width: 18px; height: 18px; }
+
+    /* SHARED */
+    section { padding: 100px 24px; }
+    .container { max-width: 1160px; margin: 0 auto; }
+    .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(32px,4vw,50px); font-weight: 700; letter-spacing: -1px; line-height: 1.1; }
+    .section-title em { font-style: normal; color: var(--accent); }
+    .section-desc { font-size: 17px; color: var(--gray-400); line-height: 1.75; max-width: 600px; margin-top: 16px; }
+    .divider-glow { height: 1px; background: linear-gradient(90deg,transparent,rgba(255,107,157,0.3),transparent); }
+
+    /* WHAT IS */
+    .what-is { background: var(--black); }
+    .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; margin-top: 64px; }
+    .what-photo {
+      border-radius: 24px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .what-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .what-photo-badge {
+      position: absolute; bottom: 20px; left: 20px; right: 20px;
+      background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,107,157,0.2);
+      border-radius: 14px; padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .what-photo-badge-icon { width: 36px; height: 36px; background: rgba(255,107,157,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .what-photo-badge-icon svg { width: 18px; height: 18px; color: var(--accent); }
+    .what-photo-badge-text { font-size: 13px; font-weight: 600; }
+    .what-photo-badge-sub { font-size: 12px; color: var(--gray-400); }
+    .what-points { list-style: none; margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
+    .what-point { display: flex; gap: 16px; align-items: flex-start; }
+    .what-point-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,107,157,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .what-point-icon svg { width: 18px; height: 18px; color: var(--accent); }
+    .what-point-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .what-point-desc { font-size: 14px; color: var(--gray-400); line-height: 1.6; }
+
+    /* SAFETY BANNER */
+    .safety-banner { background: linear-gradient(135deg,#0a1f15 0%,#0a1428 100%); border-top: 1px solid rgba(255,107,157,0.12); border-bottom: 1px solid rgba(255,107,157,0.12); padding: 64px 24px; }
+    .safety-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 48px; }
+    .safety-card {
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(255,107,157,0.15);
+      border-radius: 20px; padding: 32px; transition: border-color .25s, background .25s;
+    }
+    .safety-card:hover { border-color: rgba(255,107,157,0.35); background: rgba(0,0,0,0.5); }
+    .safety-card-icon { width: 52px; height: 52px; background: rgba(255,107,157,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .safety-card-icon svg { width: 24px; height: 24px; color: var(--accent); }
+    .safety-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .safety-card p { font-size: 14px; color: var(--gray-400); line-height: 1.65; }
+    .safety-card p strong { color: var(--white); }
+
+    /* HOW IT WORKS */
+    .how { background: #080808; }
+    .steps-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 64px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; }
+    .step { background: #0d0d0d; padding: 40px 32px; position: relative; transition: background .25s; }
+    .step:hover { background: #121212; }
+    .step-num { font-family: 'Space Grotesk',sans-serif; font-size: 48px; font-weight: 800; color: rgba(255,107,157,0.15); line-height: 1; margin-bottom: 24px; }
+    .step-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(255,107,157,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .step-icon svg { width: 22px; height: 22px; color: var(--accent); }
+    .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .step p { font-size: 14px; color: var(--gray-400); line-height: 1.65; }
+    .step-arrow { position: absolute; right: -14px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--black); display: flex; align-items: center; justify-content: center; z-index: 2; font-size: 13px; font-weight: 700; }
+    .step:last-child .step-arrow { display: none; }
+
+    /* PRODUCTS */
+    .products { background: var(--black); }
+    .products-intro { text-align: center; max-width: 640px; margin: 0 auto 64px; }
+    .products-intro .section-desc { margin: 16px auto 0; }
+
+    .product-block { margin-bottom: 80px; }
+    .product-block:last-child { margin-bottom: 0; }
+    .product-block-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px; margin-bottom: 32px;
+    }
+    .product-block-title { font-family: 'Space Grotesk',sans-serif; font-size: 32px; font-weight: 700; }
+    .product-block-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent); background: rgba(255,107,157,0.1); border: 1px solid rgba(255,107,157,0.2);
+      padding: 6px 16px; border-radius: 100px;
+    }
+    .product-block-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      text-decoration: none; padding: 8px 18px; border-radius: 8px;
+      border: 1px solid rgba(255,107,157,0.25); background: rgba(255,107,157,0.06);
+      transition: background .2s, border-color .2s;
+    }
+    .product-block-link:hover { background: rgba(255,107,157,0.12); border-color: rgba(255,107,157,0.4); }
+    .product-block-link svg { width: 14px; height: 14px; }
+
+    .product-main {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items: stretch;
+    }
+    .product-main.reverse { grid-template-columns: 1.4fr 1fr; }
+    .product-main.reverse .product-gallery { order: -1; }
+
+    .product-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .product-gallery-img {
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: #111;
+      aspect-ratio: 3/4;
+    }
+    .product-gallery-img.wide { grid-column: 1 / -1; aspect-ratio: 4/3; }
+    .product-gallery-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; transition: transform .4s; }
+    .product-gallery-img:hover img { transform: scale(1.03); }
+
+    .product-info {
+      background: #0d0d0d; border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px; padding: 36px; display: flex; flex-direction: column;
+    }
+    .product-info-desc { font-size: 15px; color: var(--gray-400); line-height: 1.75; margin-bottom: 28px; }
+    .product-specs { display: flex; flex-direction: column; gap: 0; }
+    .spec-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 14px; padding: 13px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-label { color: var(--gray-400); }
+    .spec-value { font-weight: 600; text-align: right; }
+    .spec-value.accent { color: var(--accent); }
+    .color-chips { display: flex; gap: 8px; justify-content: flex-end; }
+    .color-chip { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; }
+    .color-chip.black-chip { background: #111; border: 2px solid rgba(255,255,255,0.3); }
+    .color-chip.white-chip { background: #e5e5e5; border: 2px solid rgba(255,255,255,0.5); }
+    .product-info-footer { margin-top: auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .payment-methods { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .pay-badge {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 600;
+      color: var(--gray-400);
+    }
+
+    /* CHARGING */
+    .charging { background: #080808; }
+    .charging-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 64px; }
+    .charging-card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 36px; }
+    .charging-card-title { font-family: 'Space Grotesk',sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .charging-card-title .badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 100px; background: rgba(255,107,157,0.1); color: var(--accent); border: 1px solid rgba(255,107,157,0.2); }
+    .charge-bar-wrap { margin-bottom: 24px; }
+    .charge-bar-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+    .charge-bar-label span:last-child { color: var(--accent); }
+    .charge-bar-bg { height: 10px; border-radius: 100px; background: rgba(255,255,255,0.07); overflow: hidden; }
+    .charge-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg,var(--accent),var(--blue)); transition: width 1.5s ease; }
+    .charge-time { font-size: 14px; font-weight: 600; color: var(--gray-400); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+    .charge-time svg { width: 14px; height: 14px; color: var(--accent); }
+
+    /* ENERGY */
+    .energy { background: var(--black); }
+    .energy-inner {
+      background: linear-gradient(135deg,#0d1f14 0%,#0a1a2e 100%);
+      border: 1px solid rgba(255,107,157,0.15);
+      border-radius: 28px; padding: 64px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+      margin-top: 16px;
+    }
+    .energy-number { font-family: 'Space Grotesk',sans-serif; font-size: clamp(56px,7vw,88px); font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+    .energy-unit { font-size: 20px; color: var(--gray-400); margin-bottom: 24px; }
+    .energy-note { font-size: 15px; color: var(--gray-400); line-height: 1.7; }
+    .energy-note strong { color: var(--white); }
+    .energy-items { display: flex; flex-direction: column; gap: 20px; }
+    .energy-item { display: flex; gap: 16px; padding: 24px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,107,157,0.1); border-radius: 16px; }
+    .energy-item-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(255,107,157,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .energy-item-icon svg { width: 20px; height: 20px; color: var(--accent); }
+    .energy-item-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .energy-item-val { font-size: 14px; color: var(--gray-400); }
+    .energy-item-val strong { color: var(--accent); }
+
+    /* VENUES */
+    .venues { background: #080808; }
+    .venues-intro { text-align: center; max-width: 640px; margin: 0 auto 64px; }
+    .venues-intro .section-desc { margin: 16px auto 0; }
+    .venues-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .venue-card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 32px 28px; transition: transform .25s, border-color .25s, background .25s; }
+    .venue-card:hover { transform: translateY(-4px); border-color: rgba(255,107,157,0.2); background: #111; }
+    .venue-icon { width: 52px; height: 52px; background: rgba(255,107,157,0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px; }
+    .venue-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .venue-card p { font-size: 13px; color: var(--gray-400); line-height: 1.6; }
+
+    /* PARTNERSHIP */
+    .partnership { background: var(--black); }
+    .partnership-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .partnership-features { margin-top: 36px; display: flex; flex-direction: column; gap: 20px; }
+    .pf-item { display: flex; gap: 14px; align-items: flex-start; }
+    .pf-check { width: 24px; height: 24px; background: rgba(255,107,157,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .pf-check svg { width: 12px; height: 12px; color: var(--accent); }
+    .pf-title { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+    .pf-desc { font-size: 14px; color: var(--gray-400); line-height: 1.6; }
+    .revenue-card { background: linear-gradient(135deg,#0d1f14 0%,#111 100%); border: 1px solid rgba(255,107,157,0.2); border-radius: 24px; padding: 44px; }
+    .revenue-card-title { font-family: 'Space Grotesk',sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 32px; }
+    .revenue-split { display: flex; gap: 20px; margin-bottom: 32px; }
+    .revenue-half { flex: 1; border-radius: 16px; padding: 24px; text-align: center; }
+    .revenue-half.yours { background: rgba(255,107,157,0.1); border: 1px solid rgba(255,107,157,0.2); }
+    .revenue-half.ours { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .revenue-pct { font-family: 'Space Grotesk',sans-serif; font-size: 44px; font-weight: 800; line-height: 1; }
+    .revenue-half.yours .revenue-pct { color: var(--accent); }
+    .revenue-half.ours .revenue-pct { color: var(--gray-400); }
+    .revenue-pct-label { font-size: 13px; font-weight: 600; margin-top: 6px; color: var(--gray-400); }
+    .revenue-half.yours .revenue-pct-label { color: var(--accent); opacity: .8; }
+    .revenue-disclaimer { font-size: 13px; color: var(--gray-400); line-height: 1.6; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .revenue-disclaimer strong { color: var(--white); }
+
+    /* VIDEOS */
+    .videos { background: #080808; }
+    .videos-intro { text-align: center; max-width: 640px; margin: 0 auto 64px; }
+    .videos-intro .section-desc { margin: 16px auto 0; }
+    .videos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .video-card { border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); background: #0d0d0d; transition: border-color .3s, transform .3s, box-shadow .3s; }
+    .video-card:hover { border-color: rgba(255,107,157,0.25); transform: translateY(-4px); box-shadow: 0 24px 64px rgba(0,0,0,0.4); }
+    .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+    .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .video-info { padding: 24px 28px; }
+    .video-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .video-desc { font-size: 13px; color: var(--gray-400); line-height: 1.6; }
+
+    /* FAQ */
+    .faq { background: var(--black); }
+    .faq-inner { max-width: 760px; margin: 64px auto 0; }
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.07); padding: 28px 0; }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 20px; }
+    .faq-q-text { font-size: 16px; font-weight: 600; }
+    .faq-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,107,157,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .2s; }
+    .faq-icon svg { width: 14px; height: 14px; color: var(--accent); transition: transform .25s; }
+    .faq-item.open .faq-icon { background: var(--accent); }
+    .faq-item.open .faq-icon svg { color: var(--black); transform: rotate(45deg); }
+    .faq-a { font-size: 14px; color: var(--gray-400); line-height: 1.75; overflow: hidden; max-height: 0; transition: max-height .4s ease, margin-top .4s; margin-top: 0; }
+    .faq-item.open .faq-a { max-height: 400px; margin-top: 16px; }
+
+    /* REQUEST */
+    .request { background: #080808; }
+    .request-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .form-card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 44px; }
+    .form-row { display: flex; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; flex: 1; margin-bottom: 20px; }
+    .form-group label { font-size: 13px; font-weight: 600; color: var(--gray-400); }
+    .form-group input, .form-group select, .form-group textarea {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; color: var(--white); font-family: 'Inter',sans-serif;
+      font-size: 14px; padding: 12px 16px; outline: none;
+      transition: border-color .2s, background .2s;
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: var(--gray-500); }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: rgba(255,107,157,0.4); background: rgba(255,107,157,0.04); }
+    .form-group select option { background: #1a1a1a; }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-submit { width: 100%; background: var(--accent); color: var(--black); font-family: 'Inter',sans-serif; font-size: 15px; font-weight: 700; padding: 14px; border: none; border-radius: 10px; cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 0 30px rgba(255,107,157,0.2); }
+    .form-submit:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 0 50px rgba(255,107,157,0.35); }
+    .form-note { font-size: 12px; color: var(--gray-500); text-align: center; margin-top: 14px; line-height: 1.5; }
+    .request-info { padding-top: 8px; }
+    .info-highlights { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+    .info-hl { display: flex; gap: 14px; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 20px; }
+    .info-hl-icon { width: 40px; height: 40px; background: rgba(255,107,157,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .info-hl-icon svg { width: 18px; height: 18px; color: var(--accent); }
+    .info-hl-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+    .info-hl-desc { font-size: 13px; color: var(--gray-400); line-height: 1.5; }
+
+    /* FOOTER */
+    footer { background: #050505; border-top: 1px solid rgba(255,255,255,0.06); padding: 64px 24px 36px; }
+    .footer-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .footer-logo { font-family: 'Space Grotesk',sans-serif; font-size: 24px; font-weight: 700; color: var(--white); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { height: 28px; width: auto; object-fit: contain; }
+    .footer-tagline { font-size: 14px; color: var(--gray-400); line-height: 1.7; max-width: 300px; }
+    .footer-col h4 { font-size: 13px; font-weight: 700; letter-spacing: .5px; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a { font-size: 13px; color: var(--gray-400); text-decoration: none; transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--white); }
+    .footer-bottom { max-width: 1160px; margin: 28px auto 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 13px; color: var(--gray-500); }
+    .footer-copy span { color: var(--accent); }
+    .footer-socials { display: flex; gap: 12px; }
+    .social-btn { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: var(--gray-400); text-decoration: none; transition: background .2s, color .2s; }
+    .social-btn:hover { background: rgba(255,107,157,0.1); color: var(--accent); }
+    .social-btn svg { width: 16px; height: 16px; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 32px; right: 32px; z-index: 2000; background: var(--accent); color: var(--black); font-weight: 700; font-size: 14px; padding: 14px 24px; border-radius: 12px; box-shadow: 0 8px 32px rgba(255,107,157,0.4); transform: translateY(80px); opacity: 0; transition: transform .4s, opacity .4s; pointer-events: none; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* LIFESTYLE STRIP */
+    .lifestyle { background: var(--black); padding: 0 24px 80px; }
+    .lifestyle-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .lifestyle-img { border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,0.07); }
+    .lifestyle-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+    .lifestyle-img:hover img { transform: scale(1.04); }
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      nav{padding:18px 32px}
+      nav.scrolled{padding:12px 32px}
+      .what-grid,.partnership-inner,.request-inner{grid-template-columns:1fr;gap:48px}
+      .energy-inner{grid-template-columns:1fr;gap:36px}
+      .footer-inner{grid-template-columns:1fr 1fr}
+      .product-main,.product-main.reverse{grid-template-columns:1fr}
+      .product-main.reverse .product-gallery{order:0}
+    }
+    @media(max-width:768px){
+      nav{padding:16px 20px}
+      nav.scrolled{padding:10px 20px}
+      .nav-links{display:none}
+      .videos-grid,.charging-grid{grid-template-columns:1fr}
+      .steps-grid{grid-template-columns:1fr 1fr}
+      .venues-grid{grid-template-columns:1fr 1fr}
+      .safety-grid{grid-template-columns:1fr}
+      .revenue-split{flex-direction:column}
+      .footer-inner{grid-template-columns:1fr}
+      .energy-inner{padding:36px}
+      .form-row{flex-direction:column}
+      .lifestyle-strip{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:480px){
+      section{padding:70px 20px}
+      .steps-grid{grid-template-columns:1fr}
+      .venues-grid{grid-template-columns:1fr}
+      .energy-inner{padding:28px 24px}
+      .form-card{padding:28px 24px}
+      .lifestyle-strip{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <img src="img/logo.png" alt="RE-ENERGY" class="nav-logo-img"
+         onerror="this.style.display='none';this.nextSibling.style.display='flex'" />
+    <span style="display:none;align-items:center;gap:8px">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="rgba(255,107,157,0.1)"/><path d="M16 6L8 12v3l8-6 8 6v-3L16 6Z" fill="#ff6b9d"/><path d="M11 15v9h4v-6h2v6h4v-9l-5-4-5 4Z" fill="#ff6b9d" opacity=".7"/></svg>
+      RE<span style="color:var(--accent)">LINK</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#cosa-facciamo">Come funziona</a></li>
+    <li><a href="#prodotti">Prodotti</a></li>
+    <li><a href="#sicurezza">Sicurezza</a></li>
+    <li><a href="#partnership">Partnership</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#richiesta" class="nav-cta">Richiedi ora</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-badge"><div class="hero-badge-dot"></div>Power Bank Sharing · Italia</div>
+  <h1>Il tuo locale<br/>sempre <em>connesso</em></h1>
+  <p class="hero-sub">
+    RE-ENERGY installa le sue stazioni di ricarica nei locali ad alto afflusso.
+    Zero costi per te, zero pensieri — tu incassi il <strong style="color:var(--accent)">50% dei ricavi</strong>.
+  </p>
+  <div class="hero-actions">
+    <a href="#richiesta" class="btn-primary">Richiedi la tua stazione gratis</a>
+    <a href="#cosa-facciamo" class="btn-secondary">Scopri come funziona</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value">31</div><div class="hero-stat-label">Stazioni attive</div></div>
+    <div class="hero-stat"><div class="hero-stat-value">13</div><div class="hero-stat-label">Città coperte</div></div>
+    <div class="hero-stat"><div class="hero-stat-value">50<span>%</span></div><div class="hero-stat-label">Ricavi al locale</div></div>
+    <div class="hero-stat"><div class="hero-stat-value">0<span>€</span></div><div class="hero-stat-label">Costo per il locale</div></div>
+  </div>
+  <div class="hero-scroll">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10l5 5 5-5"/></svg>
+    Scorri
+  </div>
+</section>
+
+<div class="divider-glow"></div>
+
+<!-- WHAT IS -->
+<section class="what-is" id="cosa-facciamo">
+  <div class="container">
+    <div class="what-grid">
+      <div>
+        <p class="section-label">Chi siamo</p>
+        <h2 class="section-title">Power Bank<br/>Sharing<br/><em>intelligente</em></h2>
+        <p class="section-desc">
+          RE-ENERGY è il network italiano di stazioni di ricarica condivisa.
+          Installiamo i nostri dispositivi nei locali più frequentati d'Italia:
+          il cliente paga, preleva il power bank, lo usa nel locale e
+          lo reinserisce nella stessa stazione prima di andarsene.
+        </p>
+        <ul class="what-points">
+          <li class="what-point">
+            <div class="what-point-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div>
+              <div class="what-point-title">Ricarica da 40W ultra-rapida</div>
+              <div class="what-point-desc">I power bank RE-ENERGY erogano fino a 40W di potenza, compatibili con USB-C, Micro USB e iOS. Il cliente carica il telefono in pochi minuti, senza aspettare.</div>
+            </div>
+          </li>
+          <li class="what-point">
+            <div class="what-point-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            </div>
+            <div>
+              <div class="what-point-title">Tap & Charge — nessuna app</div>
+              <div class="what-point-desc">Basta avvicinare la carta di credito, il bancomat o il telefono al lettore NFC. Google Pay, Apple Pay, Visa, Mastercard e Amex. Nessun download, nessuna registrazione.</div>
+            </div>
+          </li>
+          <li class="what-point">
+            <div class="what-point-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <div>
+              <div class="what-point-title">Uso esclusivo nel locale</div>
+              <div class="what-point-desc">Il power bank viene utilizzato all'interno del locale e restituito nella stessa stazione prima di uscire. Un sistema chiuso, sicuro e conveniente per tutti.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="what-photo" style="min-height:480px;">
+          <img src="img/station-12-bar.jpg" alt="Stazione RE-ENERGY in un bar"
+               onerror="this.src='';this.parentElement.style.background='linear-gradient(135deg,#111,#1a1a2e)';this.style.display='none'" />
+          <div class="what-photo-badge">
+            <div class="what-photo-badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div>
+              <div class="what-photo-badge-text">Tap & Charge · 40W</div>
+              <div class="what-photo-badge-sub">NFC · No App Required</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIFESTYLE STRIP -->
+<div class="lifestyle">
+  <div class="container">
+    <div class="lifestyle-strip">
+      <div class="lifestyle-img">
+        <img src="img/station-12-qr.jpg" alt="Cliente usa RE-ENERGY con QR code"
+             onerror="this.parentElement.style.background='#111';this.style.display='none'" />
+      </div>
+      <div class="lifestyle-img">
+        <img src="img/station-12-cafe.jpg" alt="Stazione RE-ENERGY in un caffè"
+             onerror="this.parentElement.style.background='#111';this.style.display='none'" />
+      </div>
+      <div class="lifestyle-img">
+        <img src="img/station-12-white.jpg" alt="Stazione RE-ENERGY bianca"
+             onerror="this.parentElement.style.background='#111';this.style.display='none'" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SAFETY / SECURITY -->
+<section class="safety-banner" id="sicurezza">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto;">
+      <p class="section-label">Sicurezza & Tracciabilità</p>
+      <h2 class="section-title">Zero rischi,<br/><em>massima tranquillità</em></h2>
+      <p class="section-desc" style="margin:16px auto 0;">
+        Il sistema RE-ENERGY è progettato per essere sicuro sia per il locale che per il cliente.
+        Ogni power bank è completamente tracciato dal momento del prelievo.
+      </p>
+    </div>
+    <div class="safety-grid">
+      <div class="safety-card">
+        <div class="safety-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <h3>Carta di credito abbinata</h3>
+        <p>Ogni noleggio è associato in modo univoco alla carta di credito del cliente. Il sistema sa esattamente <strong>chi ha prelevato quale power bank</strong> e in quale momento.</p>
+      </div>
+      <div class="safety-card">
+        <div class="safety-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3>Uso interno al locale</h3>
+        <p>Il power bank <strong>non lascia il locale</strong>. Il cliente lo utilizza durante la sua permanenza e lo reinserisce nella stessa stazione prima di andarsene.</p>
+      </div>
+      <div class="safety-card">
+        <div class="safety-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3>Nessuna responsabilità per il locale</h3>
+        <p>In caso di mancata restituzione, <strong>il cliente risponde automaticamente</strong> tramite i dati della carta. Il locale non ha nessun obbligo e non subisce alcuna perdita.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-glow"></div>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto;">
+      <p class="section-label">Il processo</p>
+      <h2 class="section-title">Come funziona<br/><em>in 4 passi</em></h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <h3>Tap & paga</h3>
+        <p>Il cliente avvicina la carta o lo smartphone al lettore NFC. Nessuna app, nessuna registrazione. Pagamento sicuro in un secondo.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>Preleva il power bank</h3>
+        <p>Lo slot si sblocca e il cliente estrae il power bank. Collega il cavo e inizia a ricaricare il telefono immediatamente.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V12M12 12l-4 4M12 12l4 4M3 9l9-7 9 7"/></svg></div>
+        <h3>Usa nel locale</h3>
+        <p>Il power bank viene usato all'interno del locale. Quando il cliente è pronto, lo reinserisce nella stessa stazione prima di uscire.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <h3>Tu incassi il 50%</h3>
+        <p>Ogni noleggio genera ricavo. Il 50% arriva automaticamente sul tuo conto ogni mese, senza fare nulla.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-glow"></div>
+
+<!-- PRODUCTS -->
+<section class="products" id="prodotti">
+  <div class="container">
+    <div class="products-intro">
+      <p class="section-label">I nostri prodotti</p>
+      <h2 class="section-title">Due modelli,<br/><em>infinite possibilità</em></h2>
+      <p class="section-desc">Disponibili in versione bianca o nera. Scegli il modello più adatto al tuo spazio.</p>
+    </div>
+
+    <!-- RE-ENERGY 12 -->
+    <div class="product-block">
+      <div class="product-block-header">
+        <div>
+          <span class="product-block-tag">★ Premium · 12 Slot</span>
+          <div class="product-block-title" style="margin-top:12px;">RE-ENERGY 12</div>
+        </div>
+        <a href="https://www.alibaba.com/x/1lAlEUy?ck=pdp" target="_blank" rel="noopener" class="product-block-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          Scheda tecnica prodotto
+        </a>
+      </div>
+      <div class="product-main">
+        <div class="product-gallery">
+          <div class="product-gallery-img wide">
+            <img src="img/station-12-white.jpg" alt="RE-ENERGY 12 bianco fronte"
+                 onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1a1a,#111)';this.style.display='none'" />
+          </div>
+          <div class="product-gallery-img">
+            <img src="img/station-12-bar.jpg" alt="RE-ENERGY 12 in uso al bar"
+                 onerror="this.parentElement.style.background='#111';this.style.display='none'" />
+          </div>
+          <div class="product-gallery-img">
+            <img src="img/station-12-qr.jpg" alt="Pagamento QR su RE-ENERGY 12"
+                 onerror="this.parentElement.style.background='#111';this.style.display='none'" />
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-info-desc">
+            Il modello di punta per ristoranti, centri sportivi, sale bowling e locali
+            ad alto volume. 12 slot disponibili 24/7, ricarica rapida da 40W e
+            schermo touch LCD da 8" per un'esperienza di noleggio immediata e intuitiva.
+          </p>
+          <div class="product-specs">
+            <div class="spec-row"><span class="spec-label">Slot power bank</span><span class="spec-value accent">12 slot</span></div>
+            <div class="spec-row"><span class="spec-label">Modello</span><span class="spec-value">CS-S12 Pro TNG</span></div>
+            <div class="spec-row"><span class="spec-label">Potenza di uscita</span><span class="spec-value accent">40W (ricarica rapida)</span></div>
+            <div class="spec-row"><span class="spec-label">Connettori</span><span class="spec-value">USB-C · iOS · Micro USB</span></div>
+            <div class="spec-row"><span class="spec-label">Batteria</span><span class="spec-value">Li-Polymer</span></div>
+            <div class="spec-row"><span class="spec-label">Display</span><span class="spec-value">Touch LCD 8"</span></div>
+            <div class="spec-row"><span class="spec-label">Protezioni</span><span class="spec-value" style="text-align:right;font-size:12px;">Sovraccarica · Cortocircuito · Scarico</span></div>
+            <div class="spec-row"><span class="spec-label">Consumo mensile</span><span class="spec-value accent">~5,5 kWh / ~1,40 €</span></div>
+            <div class="spec-row"><span class="spec-label">Installazione</span><span class="spec-value accent">Gratuita</span></div>
+            <div class="spec-row"><span class="spec-label">Colori</span><span class="spec-value"><div class="color-chips"><div class="color-chip black-chip"></div><div class="color-chip white-chip"></div></div></span></div>
+          </div>
+          <div class="product-info-footer">
+            <div style="font-size:13px;font-weight:600;color:var(--gray-400);margin-bottom:10px;">Metodi di pagamento accettati</div>
+            <div class="payment-methods">
+              <span class="pay-badge">NFC</span>
+              <span class="pay-badge">Google Pay</span>
+              <span class="pay-badge">Apple Pay</span>
+              <span class="pay-badge">Visa</span>
+              <span class="pay-badge">Mastercard</span>
+              <span class="pay-badge">Amex</span>
+              <span class="pay-badge" style="color:var(--accent);border-color:rgba(255,107,157,0.3)">No App Richiesta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RE-ENERGY 6 -->
+    <div class="product-block">
+      <div class="product-block-header">
+        <div>
+          <span class="product-block-tag">● Compatto · 6 Slot</span>
+          <div class="product-block-title" style="margin-top:12px;">RE-ENERGY 6</div>
+        </div>
+        <a href="https://www.alibaba.com/x/1lAlEUu?ck=pdp" target="_blank" rel="noopener" class="product-block-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          Scheda tecnica prodotto
+        </a>
+      </div>
+      <div class="product-main reverse">
+        <div class="product-gallery">
+          <div class="product-gallery-img wide">
+            <img src="img/station-6-white-nfc.jpg" alt="RE-ENERGY 6 bianco con pagamento NFC"
+                 onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1a1a,#111)';this.style.display='none'" />
+          </div>
+          <div class="product-gallery-img">
+            <img src="img/station-6-black-front.jpg" alt="RE-ENERGY 6 nero fronte"
+                 onerror="this.parentElement.style.background='#111';this.style.display='none'" />
+          </div>
+          <div class="product-gallery-img">
+            <img src="img/station-6-black-angle.jpg" alt="RE-ENERGY 6 nero angolo"
+                 onerror="this.parentElement.style.background='#111';this.style.display='none'" />
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-info-desc">
+            Compatto e versatile, perfetto per bar, caffetterie e locali di medie dimensioni.
+            Stesse prestazioni del modello 12 in un ingombro ridotto. Disponibile in
+            versione bianca o nera per adattarsi a qualsiasi arredo.
+          </p>
+          <div class="product-specs">
+            <div class="spec-row"><span class="spec-label">Slot power bank</span><span class="spec-value accent">6 slot</span></div>
+            <div class="spec-row"><span class="spec-label">Potenza di uscita</span><span class="spec-value accent">40W (ricarica rapida)</span></div>
+            <div class="spec-row"><span class="spec-label">Connettori</span><span class="spec-value">USB-C · iOS · Micro USB</span></div>
+            <div class="spec-row"><span class="spec-label">Batteria</span><span class="spec-value">Li-Polymer</span></div>
+            <div class="spec-row"><span class="spec-label">Display</span><span class="spec-value">Touch LCD 8"</span></div>
+            <div class="spec-row"><span class="spec-label">Protezioni</span><span class="spec-value" style="text-align:right;font-size:12px;">Sovraccarica · Cortocircuito · Scarico</span></div>
+            <div class="spec-row"><span class="spec-label">Consumo mensile</span><span class="spec-value accent">~2,8 kWh / ~0,70 €</span></div>
+            <div class="spec-row"><span class="spec-label">Installazione</span><span class="spec-value accent">Gratuita</span></div>
+            <div class="spec-row"><span class="spec-label">Colori</span><span class="spec-value"><div class="color-chips"><div class="color-chip black-chip"></div><div class="color-chip white-chip"></div></div></span></div>
+          </div>
+          <div class="product-info-footer">
+            <div style="font-size:13px;font-weight:600;color:var(--gray-400);margin-bottom:10px;">Metodi di pagamento accettati</div>
+            <div class="payment-methods">
+              <span class="pay-badge">NFC</span>
+              <span class="pay-badge">Google Pay</span>
+              <span class="pay-badge">Apple Pay</span>
+              <span class="pay-badge">Visa</span>
+              <span class="pay-badge">Mastercard</span>
+              <span class="pay-badge">Amex</span>
+              <span class="pay-badge" style="color:var(--accent);border-color:rgba(255,107,157,0.3)">No App Richiesta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CHARGING -->
+<section class="charging">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto 64px;">
+      <p class="section-label">Performance</p>
+      <h2 class="section-title">Ricarica<br/><em>ultra-rapida 40W</em></h2>
+      <p class="section-desc" style="margin:16px auto 0;">Grazie alla potenza da 40W, i clienti recuperano la carica del telefono in pochissimi minuti.</p>
+    </div>
+    <div class="charging-grid">
+      <div class="charging-card">
+        <div class="charging-card-title">Ricarica del tuo smartphone <span class="badge">40W Output</span></div>
+        <div class="charge-bar-wrap">
+          <div class="charge-bar-label"><span>Carica al 50%</span><span>≈ 20 minuti</span></div>
+          <div class="charge-bar-bg"><div class="charge-bar-fill" style="width:50%"></div></div>
+          <div class="charge-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Solo 20 minuti per metà batteria</div>
+        </div>
+        <div class="charge-bar-wrap" style="margin-bottom:0">
+          <div class="charge-bar-label"><span>Carica al 100%</span><span>≈ 45 minuti</span></div>
+          <div class="charge-bar-bg"><div class="charge-bar-fill" style="width:100%"></div></div>
+          <div class="charge-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Meno di un'ora per carica completa</div>
+        </div>
+      </div>
+      <div class="charging-card">
+        <div class="charging-card-title">Per modello di smartphone <span class="badge">Stime</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="background:rgba(255,107,157,0.06);border:1px solid rgba(255,107,157,0.15);border-radius:12px;padding:18px;">
+            <div style="font-weight:700;font-size:15px;margin-bottom:6px;">iPhone 15 / Pro</div>
+            <div style="font-size:13px;color:var(--gray-400);">0→50% in <strong style="color:var(--accent)">~18 min</strong> · 0→100% in <strong style="color:var(--accent)">~38 min</strong></div>
+          </div>
+          <div style="background:rgba(255,107,157,0.06);border:1px solid rgba(255,107,157,0.15);border-radius:12px;padding:18px;">
+            <div style="font-weight:700;font-size:15px;margin-bottom:6px;">Samsung Galaxy S24</div>
+            <div style="font-size:13px;color:var(--gray-400);">0→50% in <strong style="color:var(--accent)">~16 min</strong> · 0→100% in <strong style="color:var(--accent)">~35 min</strong></div>
+          </div>
+          <div style="background:rgba(255,107,157,0.06);border:1px solid rgba(255,107,157,0.15);border-radius:12px;padding:18px;">
+            <div style="font-weight:700;font-size:15px;margin-bottom:6px;">Tutti gli altri smartphone</div>
+            <div style="font-size:13px;color:var(--gray-400);">0→50% in <strong style="color:var(--accent)">~15–22 min</strong> · 0→100% in <strong style="color:var(--accent)">~35–50 min</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENERGY -->
+<section class="energy">
+  <div class="container">
+    <p class="section-label">Sostenibilità & Costi</p>
+    <h2 class="section-title">Consumi<br/><em>praticamente nulli</em></h2>
+    <div class="energy-inner">
+      <div>
+        <div class="energy-number">~0,70€</div>
+        <div class="energy-unit">al mese · modello 6 slot</div>
+        <p class="energy-note">
+          La stazione RE-ENERGY 6 consuma circa <strong>2,8 kWh al mese</strong> —
+          meno di una lampadina LED accesa 5 ore al giorno.
+          Un costo talmente irrisorio da essere trascurabile per qualsiasi attività.<br/><br/>
+          Il modello RE-ENERGY 12 arriva a <strong>5,5 kWh/mese</strong> (~1,40€/mese),
+          comunque inferiore a un frigorifero in stand-by.<br/><br/>
+          <em style="color:var(--gray-500);font-size:13px;">Basato su tariffa media italiana ~0,25€/kWh.
+          La stazione entra in modalità eco nelle ore di inattività.</em>
+        </p>
+      </div>
+      <div class="energy-items">
+        <div class="energy-item">
+          <div class="energy-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div><div class="energy-item-title">RE-ENERGY 6 – 6 slot</div><div class="energy-item-val">Consumo: <strong>~2,8 kWh/mese</strong> · Costo: <strong>~0,70€/mese</strong></div></div>
+        </div>
+        <div class="energy-item">
+          <div class="energy-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div><div class="energy-item-title">RE-ENERGY 12 – 12 slot</div><div class="energy-item-val">Consumo: <strong>~5,5 kWh/mese</strong> · Costo: <strong>~1,40€/mese</strong></div></div>
+        </div>
+        <div class="energy-item">
+          <div class="energy-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a10 10 0 100-20 10 10 0 000 20zM12 8v4M12 16h.01"/></svg></div>
+          <div><div class="energy-item-title">Modalità eco automatica</div><div class="energy-item-val">Stand-by intelligente quando i power bank sono carichi o il locale è chiuso.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-glow"></div>
+
+<!-- VENUES -->
+<section class="venues">
+  <div class="container">
+    <div class="venues-intro">
+      <p class="section-label">Dove siamo presenti</p>
+      <h2 class="section-title">Ideale per<br/><em>ogni tipo di locale</em></h2>
+      <p class="section-desc">RE-ENERGY è perfetto ovunque i clienti si fermano e trascorrono del tempo.</p>
+    </div>
+    <div class="venues-grid">
+      <div class="venue-card"><div class="venue-icon">🍕</div><h3>Ristoranti & Pizzerie</h3><p>I clienti a tavola restano connessi più a lungo. Con il telefono carico ordinano di più e recensiscono il locale.</p></div>
+      <div class="venue-card"><div class="venue-icon">☕</div><h3>Bar & Caffetterie</h3><p>Clienti in pausa o in attesa: il power bank RE-ENERGY trasforma un caffè in una lunga sosta.</p></div>
+      <div class="venue-card"><div class="venue-icon">🏋️</div><h3>Centri Sportivi</h3><p>Palestre, piscine, padel: i clienti entrano con il telefono scarico e apprezzeranno la stazione RE-ENERGY.</p></div>
+      <div class="venue-card"><div class="venue-icon">🎳</div><h3>Sale Bowling & Giochi</h3><p>Sessioni lunghe = batterie a terra. Con RE-ENERGY, la serata non si interrompe mai per colpa del telefono.</p></div>
+      <div class="venue-card"><div class="venue-icon">🍺</div><h3>Pub & Locali Notturni</h3><p>Serate fino a tardi, musica e amici. Il power bank RE-ENERGY è l'alleato perfetto per ogni serata.</p></div>
+      <div class="venue-card"><div class="venue-icon">🛍️</div><h3>Negozi & Retail</h3><p>I clienti con il telefono carico restano nel negozio più a lungo, scansionano prodotti e condividono sui social.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERSHIP -->
+<section class="partnership" id="partnership">
+  <div class="container">
+    <div class="partnership-inner">
+      <div>
+        <p class="section-label">Per i locali partner</p>
+        <h2 class="section-title">Zero costi,<br/><em>profitto puro</em></h2>
+        <p class="section-desc">Non ti chiediamo nulla. Nessun canone, nessun costo di installazione, nessun contratto vincolante. Offriamo una stazione che genera guadagno passivo e tu tieni il 50% di tutto.</p>
+        <div class="partnership-features">
+          <div class="pf-item"><div class="pf-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-5"/></svg></div><div><div class="pf-title">Installazione completamente gratuita</div><div class="pf-desc">Il nostro team si occupa di tutto. Arrivo, montaggio, configurazione e collaudo.</div></div></div>
+          <div class="pf-item"><div class="pf-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-5"/></svg></div><div><div class="pf-title">Manutenzione a carico di RE-ENERGY</div><div class="pf-desc">Qualsiasi problema tecnico viene risolto da noi, senza costi per il locale.</div></div></div>
+          <div class="pf-item"><div class="pf-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-5"/></svg></div><div><div class="pf-title">Dashboard ricavi in tempo reale</div><div class="pf-desc">Monitora noleggi e guadagni ogni giorno dalla tua area riservata.</div></div></div>
+          <div class="pf-item"><div class="pf-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-5"/></svg></div><div><div class="pf-title">Pagamenti automatici mensili</div><div class="pf-desc">La tua quota del 50% viene accreditata ogni mese, automaticamente.</div></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="revenue-card">
+          <div class="revenue-card-title">Come si divide il ricavo</div>
+          <div class="revenue-split">
+            <div class="revenue-half yours"><div class="revenue-pct">50%</div><div class="revenue-pct-label">Il tuo locale</div></div>
+            <div class="revenue-half ours"><div class="revenue-pct">50%</div><div class="revenue-pct-label">RE-ENERGY</div></div>
+          </div>
+          <div style="background:rgba(255,107,157,0.06);border:1px solid rgba(255,107,157,0.15);border-radius:14px;padding:20px;margin-bottom:20px;">
+            <div style="font-weight:700;font-size:14px;margin-bottom:8px;color:var(--accent)">Esempio guadagno mensile</div>
+            <div style="font-size:13px;color:var(--gray-400);line-height:1.7;">Con 3 noleggi/giorno a 1,50€:<br/><strong style="color:var(--white)">Ricavo lordo: ~135€/mese</strong><br/><strong style="color:var(--accent)">La tua quota: ~67,50€/mese</strong> — passivi, senza fare nulla.</div>
+          </div>
+          <div class="revenue-disclaimer"><strong>Nessun investimento iniziale</strong>, nessun abbonamento. Il guadagno cresce con i noleggi. Più è frequentato il locale, più alta è la quota.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-glow"></div>
+
+<!-- VIDEOS -->
+<section class="videos" id="prodotti-video">
+  <div class="container">
+    <div class="videos-intro">
+      <p class="section-label">Guarda i prodotti</p>
+      <h2 class="section-title">Le stazioni<br/><em>in azione</em></h2>
+      <p class="section-desc">Scopri la qualità costruttiva delle stazioni RE-ENERGY e come si integrano nei locali.</p>
+    </div>
+    <div class="videos-grid">
+      <div class="video-card">
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+            title="RE-ENERGY 6 – Stazione 6 slot" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info">
+          <div class="video-title">RE-ENERGY 6 – Stazione 6 slot</div>
+          <div class="video-desc">Compatta, elegante, silenziosa. Il modello a 6 slot in versione nera e bianca, pensato per bar e caffetterie.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+            title="RE-ENERGY 12 – Stazione 12 slot" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info">
+          <div class="video-title">RE-ENERGY 12 – Stazione 12 slot</div>
+          <div class="video-desc">Il modello premium per locali ad alto volume. 12 slot, 40W di ricarica rapida e design professionale.</div>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--gray-500);margin-top:24px;">I video verranno aggiornati con i contenuti definitivi del prodotto.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto;">
+      <p class="section-label">Domande frequenti</p>
+      <h2 class="section-title">Hai qualche<br/><em>domanda?</em></h2>
+    </div>
+    <div class="faq-inner">
+      <div class="faq-item open">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Quanto costa installare una stazione RE-ENERGY?</span>
+          <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a">Assolutamente <strong>nulla</strong>. L'installazione, la stazione, i power bank e la manutenzione sono tutti a carico di RE-ENERGY. Zero investimento iniziale, zero canone mensile, zero deposito. Basta compilare la richiesta e il nostro team si occupa di tutto.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Il power bank si può portare fuori dal locale?</span>
+          <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a">No. Il power bank è pensato per essere usato <strong>all'interno del locale</strong> e restituito nella stessa stazione prima di uscire. Non si tratta di un noleggio da portare via, ma di un servizio di ricarica disponibile durante la permanenza nel locale. Il cliente paga per il tempo di utilizzo e riconsegna il dispositivo prima di andarsene.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">C'è rischio che qualcuno si porti via il power bank?</span>
+          <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a">Il rischio è praticamente nullo. Ogni noleggio viene effettuato tramite carta di credito o NFC, e il sistema associa univocamente ogni power bank al metodo di pagamento del cliente. Sa esattamente <strong>chi ha prelevato quale power bank, quando e da quale stazione</strong>. In caso di mancata restituzione, il cliente viene addebitato automaticamente. Il locale non ha nessuna responsabilità e non subisce alcuna perdita economica.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Come ricevo la mia quota dei ricavi?</span>
+          <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a">Ogni mese ricevi un rendiconto dettagliato con il numero di noleggi e il relativo guadagno. La tua quota del 50% viene accreditata tramite bonifico bancario entro i primi 5 giorni del mese successivo. Puoi monitorare tutto in tempo reale dalla tua dashboard personale.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Serve un'app per usare il servizio?</span>
+          <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a"><strong>No, nessuna app richiesta.</strong> Il sistema Tap & Charge di RE-ENERGY funziona semplicemente avvicinando la carta di credito, il bancomat o lo smartphone al lettore NFC della stazione. Vengono accettati Google Pay, Apple Pay, Visa, Mastercard e American Express. Nessun download, nessuna registrazione.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Quanto consuma la stazione in corrente?</span>
+          <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a">Il consumo è trascurabile. Il modello 6 slot consuma circa <strong>2,8 kWh/mese</strong> (~0,70€/mese), il modello 12 slot circa <strong>5,5 kWh/mese</strong> (~1,40€/mese). La stazione entra automaticamente in modalità eco quando i power bank sono carichi o il locale è chiuso. Il costo in bolletta è inferiore a quello di una lampadina LED.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Posso scegliere il colore della stazione?</span>
+          <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a">Sì. Entrambi i modelli sono disponibili in versione <strong>bianca e nera</strong>. Puoi indicare la tua preferenza nel modulo di richiesta. Il nostro team ti aiuterà a scegliere la versione che si integra meglio con l'arredo del tuo locale.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUEST -->
+<section class="request" id="richiesta">
+  <div class="container">
+    <div class="request-inner">
+      <div class="request-info">
+        <p class="section-label">Inizia ora</p>
+        <h2 class="section-title">Richiedi la tua<br/><em>stazione gratis</em></h2>
+        <p class="section-desc" style="margin-top:16px;">Compila il modulo e ti contatteremo entro 48 ore lavorative. Nessun obbligo, nessun costo.</p>
+        <div class="info-highlights">
+          <div class="info-hl">
+            <div class="info-hl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+            <div><div class="info-hl-title">Risposta in 48 ore</div><div class="info-hl-desc">Il nostro team ti contatta entro due giorni lavorativi dalla richiesta.</div></div>
+          </div>
+          <div class="info-hl">
+            <div class="info-hl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+            <div><div class="info-hl-title">Zero rischi</div><div class="info-hl-desc">Nessun contratto vincolante, nessun costo nascosto. Puoi recedere in qualsiasi momento.</div></div>
+          </div>
+          <div class="info-hl">
+            <div class="info-hl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg></div>
+            <div><div class="info-hl-title">Supporto dedicato</div><div class="info-hl-desc">Un account manager dedicato per ogni partner. Sempre disponibile per assistenza.</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="form-card">
+          <form onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group"><label>Nome *</label><input type="text" placeholder="Mario" required /></div>
+              <div class="form-group"><label>Cognome *</label><input type="text" placeholder="Rossi" required /></div>
+            </div>
+            <div class="form-group"><label>Nome del locale *</label><input type="text" placeholder="Bar dello Sport" required /></div>
+            <div class="form-group">
+              <label>Tipo di locale *</label>
+              <select required>
+                <option value="" disabled selected>Seleziona il tipo</option>
+                <option>Bar / Caffetteria</option>
+                <option>Ristorante / Pizzeria</option>
+                <option>Pub / Locale notturno</option>
+                <option>Centro sportivo / Palestra</option>
+                <option>Sala bowling / Giochi</option>
+                <option>Negozio / Retail</option>
+                <option>Hotel / B&B</option>
+                <option>Altro</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Città *</label><input type="text" placeholder="Milano" required /></div>
+              <div class="form-group">
+                <label>Clienti medi/giorno</label>
+                <select>
+                  <option value="" disabled selected>Stima</option>
+                  <option>Meno di 50</option>
+                  <option>50 – 150</option>
+                  <option>150 – 300</option>
+                  <option>Oltre 300</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label>Email *</label><input type="email" placeholder="mario@locale.it" required /></div>
+            <div class="form-group"><label>Telefono</label><input type="tel" placeholder="+39 333 000 0000" /></div>
+            <div class="form-group">
+              <label>Modello preferito</label>
+              <select>
+                <option value="" disabled selected>Scegli il modello</option>
+                <option>RE-ENERGY 6 – Bianco</option>
+                <option>RE-ENERGY 6 – Nero</option>
+                <option>RE-ENERGY 12 – Bianco</option>
+                <option>RE-ENERGY 12 – Nero</option>
+                <option>Non ho preferenze</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Note aggiuntive</label><textarea placeholder="Qualsiasi altra informazione utile..."></textarea></div>
+            <button type="submit" class="form-submit">Invia la richiesta gratuita →</button>
+            <p class="form-note">Inviando il modulo accetti la nostra <a href="#" style="color:var(--accent)">Privacy Policy</a>. Non utilizziamo i tuoi dati per scopi di marketing.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="img/logo.png" alt="RE-ENERGY" onerror="this.style.display='none'" />
+        <span>RE<span style="color:var(--accent)">LINK</span></span>
+      </div>
+      <p class="footer-tagline">Il network italiano di power bank sharing per locali ad alto afflusso. Zero costi, guadagno immediato.</p>
+    </div>
+    <div class="footer-col"><h4>Prodotti</h4><ul><li><a href="#prodotti">RE-ENERGY 6</a></li><li><a href="#prodotti">RE-ENERGY 12</a></li><li><a href="#prodotti-video">Video</a></li></ul></div>
+    <div class="footer-col"><h4>Azienda</h4><ul><li><a href="#cosa-facciamo">Come funziona</a></li><li><a href="#sicurezza">Sicurezza</a></li><li><a href="#partnership">Partnership</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+    <div class="footer-col"><h4>Legale</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Termini di servizio</a></li><li><a href="#">Cookie Policy</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 <span>RE-ENERGY</span> S.r.l. — P.IVA 12345678901 — Tutti i diritti riservati</div>
+    <div class="footer-socials">
+      <a href="#" class="social-btn" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+      <a href="#" class="social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      <a href="#" class="social-btn" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Richiesta inviata! Ti contatteremo entro 48 ore.</div>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 40));
+
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
+    e.target.reset();
+  }
+
+  // Animate charge bars on scroll
+  const bars = document.querySelectorAll('.charge-bar-fill');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const w = entry.target.getAttribute('data-width');
+        if (w) entry.target.style.width = w;
+      }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(bar => {
+    bar.setAttribute('data-width', bar.style.width);
+    bar.style.width = '0';
+    observer.observe(bar);
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
